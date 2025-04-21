@@ -1,0 +1,61 @@
+## Build results
+bin/
+obj/
+out/
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Visual Studio Code
+.vscode/
+
+## Rider
+.idea/
+*.sln.iml
+
+## Logs
+*.log
+
+## Others
+*.db
+*.DS_Store
+Thumbs.db
+
+## dotnet specific
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Core
+wwwroot/dist/
+node_modules/
+.env
+.env.*
+
+# Test results
+TestResults/
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+*.snupkg
+
+# Others
+_ReSharper*/
+*.vs/
+*.tmp
+*.bak
+*.swp
+*.orig
+
+# Local secrets
+secrets.json
+
+# Include your own folders (if needed)
+src/**/appsettings.Development.json
