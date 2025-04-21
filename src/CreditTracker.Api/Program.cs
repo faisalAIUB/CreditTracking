@@ -1,6 +1,17 @@
+using CreditTracker.Api;
+using CreditTracker.Application;
+using CreditTracker.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services
+    .AddApplicationServices(builder.Configuration)
+    .AddInfrastructureServices(builder.Configuration)
+    .AddApiServices(builder.Configuration);
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+
+app.UseApiServices();
+
 
 app.Run();
