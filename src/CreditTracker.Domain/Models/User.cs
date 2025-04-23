@@ -17,8 +17,28 @@ namespace CreditTracker.Domain.Models
         public string Name { get; private set; } = default!;
         public string Address {  get; private set; } = default!;
         public string Latitude {  get; private set; } = default!;
-        public string Longitude {  get; private set; } = default!;    
-        
+        public string Longitude {  get; private set; } = default!;
+        public string OtpCode { get; private set; } = default!;
+        public DateTime OtpExpiry { get; private set; } = default!;
+        public bool IsVerified { get; private set; } = default!;
+        public bool IsActive {  get; private set; } = default!; 
+
+        public void SetOtp(string otp, DateTime expiry)
+        {
+            OtpCode = otp;
+            OtpExpiry = expiry;
+            IsVerified = false;
+        }
+        public bool VerifyOtp(string otp)
+        {
+            if (OtpCode == otp && OtpExpiry >= DateTime.UtcNow)
+            {
+                IsVerified = true;
+                OtpCode = null;
+                return true;
+            }
+            return false;
+        }
         public static User Create( string userName, string email, string passwordHash, Role role, string name, string address, string latitudel, string longitude)
         {
             var user = new User

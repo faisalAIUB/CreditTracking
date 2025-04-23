@@ -66,5 +66,10 @@ namespace CreditTracker.Infrastructure.Data.Repositories.Core
             var result = data.Select(selectPredicate.Compile()).ToList();
             return result;
         }
+        public async Task<bool> Any(Expression<Func<TEntity, bool>> predicate)
+        {
+            long count = await DbSet.CountDocumentsAsync(predicate);
+            return count > 0;
+        }
     }
 }

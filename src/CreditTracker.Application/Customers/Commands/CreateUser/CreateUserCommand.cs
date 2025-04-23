@@ -1,15 +1,16 @@
-﻿using BuildingBlocks.CQRS;
+﻿using Ardalis.Result;
+using BuildingBlocks.CQRS;
 using CreditTracker.Application.Dtos;
 using FluentValidation;
 
 namespace CreditTracker.Application.Customers.Commands.CreateUser
 {
-    public record CreateUserCommand(UserDto User): ICommand<CreateUserResult>;
+    public record CreateUserCommand(UserDto User): ICommand<Result<CreateUserResult>>;
     public record CreateUserResult(string Id);
 
-    public class CreaeUserCommandValidator : AbstractValidator<CreateUserCommand>
+    public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {
-        public CreaeUserCommandValidator()
+        public CreateUserCommandValidator() 
         {
             RuleFor(x => x.User.Name).NotEmpty().WithMessage("Name is required");
             RuleFor(x => x.User.UserName).NotEmpty().WithMessage("UserName is required");

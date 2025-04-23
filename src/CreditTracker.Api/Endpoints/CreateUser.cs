@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using Ardalis.Result;
+using Carter;
 using CreditTracker.Application.Customers.Commands.CreateUser;
 using CreditTracker.Application.Dtos;
 using Mapster;
@@ -18,8 +19,13 @@ namespace CreditTracker.Api.Endpoints
             {
                 var command = request.Adapt<CreateUserCommand>();
                 var result = await sender.Send(command);
-                var response = result.Adapt<CreateUserResponse>();
-                return Results.Created("",response);
+                return result switch
+                {
+                    { Status: ResultStatus.Ok } => Results.Ok(result.Value.Adapt<CreateUserResponse>()),
+                    { Status: ResultStatus.Conflict } => Results.Conflict(result.Errors),
+                    { Status: ResultStatus.Invalid } => Results.BadRequest(result.ValidationErrors),
+                    _ => Results.BadRequest(result.Errors)
+                };
             })
              .WithName("CreateUser")
             .Produces<CreateUserResponse>(StatusCodes.Status201Created)

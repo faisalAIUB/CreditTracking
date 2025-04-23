@@ -18,5 +18,6 @@ namespace CreditTracker.Application.Data
 
         IEnumerable<TEntity> GetAllByIds(List<string> keys);
         List<dynamic> GetSingleColumnList(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, dynamic>> selectPredicate);
+        Task<bool> Any(Expression<Func<TEntity, bool>> predicate);
     }
 }
