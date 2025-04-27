@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using BuildingBlocks.Helper;
 using Carter;
 using CreditTracker.Application.Customers.Commands.VerifyOtp;
 using Mapster;
@@ -17,13 +18,8 @@ namespace CreditTracker.Api.Endpoints
             {
                 var command = request.Adapt<VerifyOtpCommand>();
                 var result = await sender.Send(command);
-                return result switch
-                {
-                    { Status: ResultStatus.Ok } => Results.Ok(result.Value.Adapt<VerifyOtpResponse>()),
-                    { Status: ResultStatus.NotFound } => Results.NotFound(result.Errors),
-                    { Status: ResultStatus.Invalid } => Results.BadRequest(result.ValidationErrors),
-                    _ => Results.BadRequest(result.Errors)
-                };
+                return result.ToApiResult<VerifyOtpResult, VerifyOtpResponse>();
+                
             });
         }
     }

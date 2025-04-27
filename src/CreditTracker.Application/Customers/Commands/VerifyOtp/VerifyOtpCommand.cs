@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace CreditTracker.Application.Customers.Commands.VerifyOtp
 {
     public record VerifyOtpCommand(string Id, string Otp) : IQuery<Result<VerifyOtpResult>>;
-    public record VerifyOtpResult(bool isSuccess);
+    public record VerifyOtpResult(bool IsSuccess);
 
     public class VerifyOtpCommandValidator : AbstractValidator<VerifyOtpCommand>
     {

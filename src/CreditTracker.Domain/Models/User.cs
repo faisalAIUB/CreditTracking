@@ -43,7 +43,6 @@ namespace CreditTracker.Domain.Models
         {
             var user = new User
             {
-             
                 UserName = userName ,
                 Email = email ,
                 PasswordHash = passwordHash ,
@@ -51,7 +50,8 @@ namespace CreditTracker.Domain.Models
                 Name = name ,
                 Address = address ,
                 Latitude = latitudel ,
-                Longitude = longitude
+                Longitude = longitude,
+                IsActive = true
             };
             return user;
         }

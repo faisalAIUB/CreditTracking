@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Behaviors;
 using FluentValidation;
+using Mapster;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -19,6 +20,7 @@ namespace CreditTracker.Application
                 config.AddOpenBehavior(typeof(LoggingBehavior<,>));
             });            
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            
             return services;
         }
     }
