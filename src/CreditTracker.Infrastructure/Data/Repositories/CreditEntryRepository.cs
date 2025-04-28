@@ -5,9 +5,9 @@ using CreditTracker.Infrastructure.Data.Repositories.Core;
 
 namespace CreditTracker.Infrastructure.Data.Repositories
 {
-    public class UserRepository<T> : Repository<T>, IRepository<T> where T : User
+    public class CreditEntryRepository<T> : Repository<T>, IRepository<T> where T : CreditEntry
     {
-        public UserRepository(IDbContext context, ICurrentUserService currentUserService) : base(context, currentUserService)
+        public CreditEntryRepository(IDbContext context, ICurrentUserService currentUserService) : base(context, currentUserService)
         {
         }
     }

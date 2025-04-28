@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Exceptions.Handler;
 using Carter;
+using CreditTracker.Application.Commons;
 using HealthChecks.MongoDb;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
@@ -81,6 +82,8 @@ namespace CreditTracker.Api
                     policy.RequireRole("Shop");
                 });
             });
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             return services;
         }
 

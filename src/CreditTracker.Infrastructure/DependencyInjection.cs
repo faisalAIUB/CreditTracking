@@ -16,6 +16,7 @@ namespace CreditTracker.Infrastructure
             var databaseName = config.GetSection("Database:Name").Value!;
             services.AddSingleton<IDbContext>(x => new DbContext(connectionString, databaseName));
             services.AddTransient(typeof(IRepository<User>), typeof(UserRepository<User>));
+            services.AddTransient(typeof(IRepository<CreditEntry>), typeof(CreditEntryRepository<CreditEntry>));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;

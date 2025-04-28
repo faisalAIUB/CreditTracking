@@ -30,6 +30,7 @@ namespace CreditTracker.Infrastructure.Data.Repositories.Core
         {
             IDbEntityMapper.Map();
             UserMapper.Map();
+            CreditEntryMapper.Map();
         }
         private static void RegisterConventions()
         {

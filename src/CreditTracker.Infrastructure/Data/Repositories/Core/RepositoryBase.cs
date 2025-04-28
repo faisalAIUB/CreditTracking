@@ -1,4 +1,5 @@
-﻿using CreditTracker.Application.Data;
+﻿using CreditTracker.Application.Commons;
+using CreditTracker.Application.Data;
 using CreditTracker.Domain.Abstractions;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -24,17 +25,23 @@ namespace CreditTracker.Infrastructure.Data.Repositories.Core
 
     public abstract class Repository<TEntity> : ReadRepository<TEntity>, IRepository<TEntity> where TEntity : class, IEntity<string>
     {
-        protected Repository(IDbContext context) : base(context)
+        private readonly ICurrentUserService _currentUserService;
+        protected Repository(IDbContext context, ICurrentUserService currentUserService) : base(context)
         {
-
+            _currentUserService = currentUserService;
         }
         public void Add(TEntity obj)
         {
+            SetAuditFields(obj, true);
             _context.AddCommand(() => DbSet.InsertOneAsync(obj));
         }
 
         public void AddMany(IEnumerable<TEntity> objs)
         {
+            foreach (var obj in objs) 
+            {
+                SetAuditFields(obj, true);
+            }
             _context.AddCommand(() => DbSet.InsertManyAsync(objs));
         }
 
@@ -73,6 +80,7 @@ namespace CreditTracker.Infrastructure.Data.Repositories.Core
 
             foreach (var doc in entities)
             {
+                SetAuditFields(doc, false);
                 var filter = filterBuilder.Where(x => x.Id == doc.Id);
                 updates.Add(new ReplaceOneModel<TEntity>(filter, doc));
             }
@@ -85,7 +93,8 @@ namespace CreditTracker.Infrastructure.Data.Repositories.Core
         }
 
         public virtual void Update(TEntity obj)
-        {            
+        {
+            SetAuditFields(obj, false);
             var dbEntity = obj as IEntity<string>;            
             _context.AddCommand(() => DbSet.ReplaceOneAsync(x => x.Id == dbEntity.Id, obj));
         }
@@ -94,7 +103,30 @@ namespace CreditTracker.Infrastructure.Data.Repositories.Core
         {
             var update = Builders<TEntity>.Update.Set<dynamic>(updatePredicate, value);
             var filter = Builders<TEntity>.Filter.Where(filterPredicate);
-            _context.AddCommand(() => DbSet.UpdateManyAsync(filter, update));
+            var now = DateTime.UtcNow;
+            var userId = _currentUserService.UserId ?? ObjectId.Empty.ToString();
+
+            var auditUpdate = Builders<TEntity>.Update
+                .Set(x => ((TEntity)(object)x).ModifiedAt, now)
+                .Set(x => ((TEntity)(object)x).ModifiedBy, userId);
+            var combinedUpdate = Builders<TEntity>.Update.Combine(update, auditUpdate);
+            _context.AddCommand(() => DbSet.UpdateManyAsync(filter, combinedUpdate));
+        }
+        private void SetAuditFields(TEntity entity, bool isNew)
+        {
+            
+            var now = DateTime.UtcNow;
+            var userId = _currentUserService.UserId ?? ObjectId.Empty.ToString();
+
+            if (isNew)
+            {
+                entity.CreatedAt = now;
+                entity.CreatedBy = userId;
+            }
+
+            entity.ModifiedAt = now;
+            entity.ModifiedBy = userId;
+            
         }
     }
 }
