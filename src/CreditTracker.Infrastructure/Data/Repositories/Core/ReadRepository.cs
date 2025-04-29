@@ -45,6 +45,11 @@ namespace CreditTracker.Infrastructure.Data.Repositories.Core
             var data = await DbSet.FindAsync(predicate);
             return data.ToList();
         }
+        public virtual async Task<List<TEntity>> GetByFilterWithPagination(Expression<Func<TEntity, bool>> predicate, int limit, int offset)
+        {
+            var data = await DbSet.Find(predicate).Limit(limit).Skip(offset).ToListAsync();
+            return data;
+        }
 
         public virtual async Task<TEntity> GetById(string id)
         {

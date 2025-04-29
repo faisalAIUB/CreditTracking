@@ -20,8 +20,7 @@ namespace CreditTracker.Domain.Models
         public string Longitude {  get; private set; } = default!;
         public string OtpCode { get; private set; } = default!;
         public DateTime OtpExpiry { get; private set; } = default!;
-        public bool IsVerified { get; private set; } = default!;
-        public bool IsActive {  get; private set; } = default!; 
+        public bool IsVerified { get; private set; } = default!;        
 
         public void SetOtp(string otp, DateTime expiry)
         {
@@ -65,5 +64,6 @@ namespace CreditTracker.Domain.Models
             Latitude = latitude;
             Longitude = longitude;               
         }
+        
     }
 }

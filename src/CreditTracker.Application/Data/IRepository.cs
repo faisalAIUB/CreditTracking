@@ -25,7 +25,7 @@ namespace CreditTracker.Application.Data
 
         Task<long> CountAsync(Expression<Func<TEntity, bool>> predicate);
 
-        void ReplaceManyAsync(IEnumerable<TEntity> entities);
+        void ReplaceMany(IEnumerable<TEntity> entities);
 
         void AddMany(IEnumerable<TEntity> objs);
 

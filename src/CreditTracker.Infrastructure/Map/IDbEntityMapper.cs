@@ -24,6 +24,7 @@ namespace CreditTracker.Infrastructure.Map
                         .SetSerializer(new StringSerializer(BsonType.ObjectId));
                     x.MapProperty(e => e.CreatedAt).SetElementName("CreatedAt");
                     x.MapProperty(e => e.ModifiedAt).SetElementName("ModifiedAt");
+                    x.MapProperty(e => e.IsActive).SetElementName("IsActive");
                 });
             }
         }

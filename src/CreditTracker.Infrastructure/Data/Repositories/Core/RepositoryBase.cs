@@ -73,7 +73,7 @@ namespace CreditTracker.Infrastructure.Data.Repositories.Core
             _context.AddCommand(async () => await DbSet.DeleteManyAsync(predicate));
         }
 
-        public virtual void ReplaceManyAsync(IEnumerable<TEntity> entities)
+        public virtual void ReplaceMany(IEnumerable<TEntity> entities)
         {
             var updates = new List<WriteModel<TEntity>>();
             var filterBuilder = Builders<TEntity>.Filter;

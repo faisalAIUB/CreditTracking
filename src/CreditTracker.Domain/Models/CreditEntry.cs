@@ -28,7 +28,8 @@ namespace CreditTracker.Domain.Models
                 Amount = amount,
                 Date = date,
                 IsPaid = isPaid,
-                PaymentDate = paymentDate
+                PaymentDate = paymentDate,
+                IsActive = true
             };
             entry.AddDomainEvent(new CreditEntryCreatedEvent(entry));
             return entry;
@@ -39,5 +40,6 @@ namespace CreditTracker.Domain.Models
             PaymentDate = paymentDate;
             AddDomainEvent(new CreditEntryUpdatedEvent(this));
         }
+        
     }
 }

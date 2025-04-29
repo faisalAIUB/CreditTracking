@@ -9,6 +9,7 @@ namespace CreditTracker.Application.Data
         Task<TEntity> GetSingle(Expression<Func<TEntity, bool>> predicate);
 
         Task<List<TEntity>> GetByFilter(Expression<Func<TEntity, bool>> predicate);
+        Task<List<TEntity>> GetByFilterWithPagination(Expression<Func<TEntity, bool>> predicate, int limit, int offset);
 
         Task<TEntity> GetById(string id);
 

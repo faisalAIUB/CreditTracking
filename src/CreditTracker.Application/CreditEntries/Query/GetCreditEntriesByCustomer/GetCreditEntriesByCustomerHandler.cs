@@ -1,0 +1,41 @@
+﻿using Ardalis.Result;
+using BuildingBlocks.CQRS;
+using BuildingBlocks.Pagination;
+using CreditTracker.Application.Data;
+using CreditTracker.Application.Dtos;
+using CreditTracker.Domain.Models;
+using Mapster;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CreditTracker.Application.CreditEntries.Query.GetCreditEntriesByCustomer
+{
+    public class GetCreditEntriesByCustomerHandler (IRepository<CreditEntry> creditEntryRepo)
+        : IQueryHandler<GetCreditEntriesByCustomerQuery, Result<GetCreditEntriesByCustomerResult>>
+    {
+        public async Task<Result<GetCreditEntriesByCustomerResult>> Handle(GetCreditEntriesByCustomerQuery query, CancellationToken cancellationToken)
+        {
+            var pageSize = query.PaginationRequest.PageSize;
+            var pageIndex = query.PaginationRequest.PageIndex;
+            var totalCount = await creditEntryRepo.CountAsync(x => x.IsActive);
+            var creditEntries = await creditEntryRepo.GetByFilterWithPagination(x => x.CustomerId == query.CustomerId && x.IsActive, pageSize, pageSize * (pageIndex - 1));
+
+            if(creditEntries == null || creditEntries.Count == 0)
+            {
+                return Result.NoContent();
+            }
+            var creditEntryDtoList = creditEntries.Adapt<List<CreditEntryDto>>();
+            var preginatedResult = new PaginationResult<CreditEntryDto>
+            (
+                pageIndex,
+                pageSize,
+                totalCount,
+                creditEntryDtoList
+            );
+            return Result.Success(new GetCreditEntriesByCustomerResult(preginatedResult));
+        }
+    }
+}
