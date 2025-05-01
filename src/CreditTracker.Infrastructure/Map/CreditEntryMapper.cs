@@ -10,7 +10,7 @@ namespace CreditTracker.Infrastructure.Map
         {
             if (!BsonClassMap.IsClassMapRegistered(typeof(CreditEntry)))
             {
-                BsonClassMap.RegisterClassMap<User>(x =>
+                BsonClassMap.RegisterClassMap<CreditEntry>(x =>
                 {
                     x.AutoMap();
                 });

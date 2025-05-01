@@ -24,7 +24,7 @@ namespace CreditTracker.Application.Customers.Commands.VerifyOtp
             }
             else
             {
-                return Result.NotFound("User not found");
+                throw new Exception.UserNotFoundException(command.Id);
             }
         }
     }

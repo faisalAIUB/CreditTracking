@@ -1,8 +1,10 @@
 ﻿using Ardalis.Result;
 using BuildingBlocks.CQRS;
+using BuildingBlocks.Exceptions;
 using BuildingBlocks.Helper;
 using CreditTracker.Application.Data;
 using CreditTracker.Application.Dtos;
+using CreditTracker.Application.Exception;
 using CreditTracker.Domain.Models;
 using Mapster;
 using Microsoft.Extensions.Configuration;
@@ -21,11 +23,11 @@ namespace CreditTracker.Application.Customers.Commands.Login
             var user = await userRepo.GetSingle(x => x.UserName == command.UserName && x.IsVerified == true && x.IsActive == true);
             if (user is null)    
             {
-                return Result.NotFound("User not found");
+                throw new UserNotFoundException(command.UserName);
             }
             if(!PasswordHasher.Verify(command.Password, user.PasswordHash))
             {
-                return Result.Invalid(new List<ValidationError> { new("Password", "Invalid password") });
+                throw new BadRequestException("Invalid password");
             }
             var userDto = user.Adapt<UserDto>();
             var token = GenerateToken(userDto);

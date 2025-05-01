@@ -17,6 +17,7 @@ namespace BuildingBlocks.Helper
                 ResultStatus.Invalid => Results.BadRequest(result.ValidationErrors),
                 ResultStatus.NotFound => Results.NotFound(result.Errors),
                 ResultStatus.Unauthorized => Results.Unauthorized(),
+                ResultStatus.NoContent => Results.NoContent(),
                 _ => Results.BadRequest(result.Errors)
             };
         }

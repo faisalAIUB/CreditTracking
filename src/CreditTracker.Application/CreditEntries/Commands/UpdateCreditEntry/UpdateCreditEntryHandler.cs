@@ -1,8 +1,11 @@
 ﻿using Ardalis.Result;
 using BuildingBlocks.CQRS;
+using BuildingBlocks.Exceptions;
 using CreditTracker.Application.Data;
+using CreditTracker.Application.Exception;
 using CreditTracker.Domain.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +21,7 @@ namespace CreditTracker.Application.CreditEntries.Commands.UpdateCreditEntry
             var creditEntry = await creditEntryRepo.GetById(command.Id);
             if (creditEntry == null) 
             {
-                return Result.NotFound();
+                throw new CreditEntryNotFoundException(command.Id);
             }
             creditEntry.Update(command.IsPaid, command.PaymentDate);
             creditEntryRepo.Update(creditEntry);

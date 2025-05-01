@@ -7,7 +7,7 @@ using Mapster;
 using MediatR;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace CreditTracker.Api.Endpoints
+namespace CreditTracker.Api.Endpoints.User
 {
 
     public record CreateUserRequest(UserDto User);
@@ -20,13 +20,13 @@ namespace CreditTracker.Api.Endpoints
             {
                 var command = request.Adapt<CreateUserCommand>();
                 var result = await sender.Send(command);
-                return result.ToApiResult<CreateUserResult, CreateUserResponse>();               
+                return result.ToApiResult<CreateUserResult, CreateUserResponse>();
             })
             .WithName("CreateUser")
             .Produces<CreateUserResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Create User")
-            .WithDescription("Create User")
+            .WithDescription("Create User for role customr. Role id is 2")
             .WithMetadata(new SwaggerOperationAttribute(
                 summary: "Create a user",
                 description: "Returns user id"

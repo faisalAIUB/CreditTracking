@@ -5,7 +5,7 @@ using CreditTracker.Application.Customers.Commands.VerifyOtp;
 using Mapster;
 using MediatR;
 
-namespace CreditTracker.Api.Endpoints
+namespace CreditTracker.Api.Endpoints.Login
 {
     public record VerifyOtpRequest(string Id, string Otp);
     public record VerifyOtpResponse(bool IsSuccess);
@@ -19,7 +19,7 @@ namespace CreditTracker.Api.Endpoints
                 var command = request.Adapt<VerifyOtpCommand>();
                 var result = await sender.Send(command);
                 return result.ToApiResult<VerifyOtpResult, VerifyOtpResponse>();
-                
+
             });
         }
     }

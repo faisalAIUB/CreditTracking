@@ -6,7 +6,7 @@ using Mapster;
 using MediatR;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace CreditTracker.Api.Endpoints
+namespace CreditTracker.Api.Endpoints.CreditEntries
 {
     public record CreateCreditEntryRequest(CreditEntryDto CreditEntry);
     public record CreateCreditEntryResponse(string Id);
@@ -14,7 +14,7 @@ namespace CreditTracker.Api.Endpoints
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("/creditentry", async (CreateCreditEntryRequest request, ISender sender) => 
+            app.MapPost("/creditentry", async (CreateCreditEntryRequest request, ISender sender) =>
             {
                 var command = request.Adapt<CreateCreditEntryCommand>();
                 var result = await sender.Send(command);

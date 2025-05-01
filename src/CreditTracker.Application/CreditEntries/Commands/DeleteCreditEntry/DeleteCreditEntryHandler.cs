@@ -1,6 +1,8 @@
 ﻿using Ardalis.Result;
 using BuildingBlocks.CQRS;
+using BuildingBlocks.Exceptions;
 using CreditTracker.Application.Data;
+using CreditTracker.Application.Exception;
 using CreditTracker.Domain.Models;
 
 
@@ -14,7 +16,7 @@ namespace CreditTracker.Application.CreditEntries.Commands.DeleteCreditEntry
             var creditEntry = await creditEntryRepo.GetById(command.Id);
             if (creditEntry == null)
             {
-                return Result.NotFound();
+                throw new CreditEntryNotFoundException(command.Id);
             }
             creditEntry.Remove();
             creditEntryRepo.Update(creditEntry);

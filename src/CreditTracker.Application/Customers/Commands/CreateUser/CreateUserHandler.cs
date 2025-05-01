@@ -1,5 +1,6 @@
 ﻿using Ardalis.Result;
 using BuildingBlocks.CQRS;
+using BuildingBlocks.Exceptions;
 using BuildingBlocks.Helper;
 using CreditTracker.Application.Data;
 using CreditTracker.Application.Dtos;
@@ -22,7 +23,7 @@ namespace CreditTracker.Application.Customers.Commands.CreateUser
         {
             if (await userRepository.Any(x => x.UserName == command.User.UserName && x.IsVerified && x.IsActive))
             {
-                return Result.Conflict("User already exists.");
+                throw new BadRequestException("User already exist");
             }
             var otp = GenerateOtp();
             var otpExpiry = DateTime.UtcNow.AddMinutes(5);
