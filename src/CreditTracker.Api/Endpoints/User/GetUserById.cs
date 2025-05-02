@@ -4,31 +4,30 @@ using CreditTracker.Application.Customers.Queries.GetUser;
 using CreditTracker.Application.Dtos;
 using MediatR;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Security.Claims;
 
 namespace CreditTracker.Api.Endpoints.User
 {
-    public record GetCurrentUserResponse(UserDto User);
-    public class GetCurrentUser : ICarterModule
+    public record GetUserResponse(UserDto User);
+    public class GetUserById : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/user/getcurrentuser", async (HttpContext httpContext, ISender sender) =>
+            app.MapGet("/user/{id}", async (string Id, ISender sender) =>
             {
-                var userId = httpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-                var result = await sender.Send(new GetUserQuery(userId!));
+                var query = new GetUserQuery(Id);
+                var result = await sender.Send(query);
                 return result.Value;
-            }).RequireAuthorization(policy => policy.RequireRole("Shop", "Customer"))
-                .WithName("Get Current User")
+            }).RequireAuthorization("ShopPolicy")
+                .WithName("Get User by Id")
                 .Produces<GetCreditEntryResponse>(StatusCodes.Status200OK)
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                 .ProducesProblem(StatusCodes.Status409Conflict)
                 .ProducesProblem(StatusCodes.Status404NotFound)
                 .ProducesProblem(StatusCodes.Status401Unauthorized)
-                .WithSummary("Get Current User")
-                .WithDescription("Get Current User")
+                .WithSummary("Get a User")
+                .WithDescription("Get a User")
                 .WithMetadata(new SwaggerOperationAttribute(
-                    summary: "Get Current User",
+                    summary: "Get a User",
                     description: "Returns a User"
                 ));
         }

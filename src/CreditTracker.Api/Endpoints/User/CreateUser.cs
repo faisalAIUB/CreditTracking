@@ -16,15 +16,18 @@ namespace CreditTracker.Api.Endpoints.User
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("/users", async (CreateUserRequest request, ISender sender) =>
+            app.MapPost("/user", async (CreateUserRequest request, ISender sender) =>
             {
                 var command = request.Adapt<CreateUserCommand>();
                 var result = await sender.Send(command);
-                return result.ToApiResult<CreateUserResult, CreateUserResponse>();
+                return result.Value;
             })
             .WithName("CreateUser")
             .Produces<CreateUserResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status409Conflict)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
             .WithSummary("Create User")
             .WithDescription("Create User for role customr. Role id is 2")
             .WithMetadata(new SwaggerOperationAttribute(

@@ -20,7 +20,7 @@ namespace CreditTracker.Application.CreditEntries.Query.GetCreditEntriesByCustom
         {
             var pageSize = query.PaginationRequest.PageSize;
             var pageIndex = query.PaginationRequest.PageIndex;
-            var totalCount = await creditEntryRepo.CountAsync(x => x.IsActive);
+            var totalCount = await creditEntryRepo.CountAsync(x => x.IsActive && x.CustomerId == query.CustomerId);
             var creditEntries = await creditEntryRepo.GetByFilterWithPagination(x => x.CustomerId == query.CustomerId && x.IsActive, pageSize, pageSize * (pageIndex - 1));
 
             if(creditEntries == null || creditEntries.Count == 0)

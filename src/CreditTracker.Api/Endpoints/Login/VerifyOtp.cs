@@ -4,6 +4,7 @@ using Carter;
 using CreditTracker.Application.Customers.Commands.VerifyOtp;
 using Mapster;
 using MediatR;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace CreditTracker.Api.Endpoints.Login
 {
@@ -18,9 +19,17 @@ namespace CreditTracker.Api.Endpoints.Login
             {
                 var command = request.Adapt<VerifyOtpCommand>();
                 var result = await sender.Send(command);
-                return result.ToApiResult<VerifyOtpResult, VerifyOtpResponse>();
+                return result.Value;
 
-            });
+            }).WithName("Verifyotp")
+            .Produces<LoginResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .WithSummary("Verifyotp")
+            .WithDescription("Verifyotp")
+            .WithMetadata(new SwaggerOperationAttribute(
+                summary: "Verifyotp",
+                description: "Verifyotp"
+            ));
         }
     }
 }

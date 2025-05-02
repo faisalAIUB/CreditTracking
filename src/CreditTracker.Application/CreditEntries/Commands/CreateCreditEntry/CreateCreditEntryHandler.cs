@@ -2,26 +2,37 @@
 using BuildingBlocks.CQRS;
 using CreditTracker.Application.Data;
 using CreditTracker.Application.Dtos;
+using CreditTracker.Application.Exception;
 using CreditTracker.Domain.Models;
 
 
 namespace CreditTracker.Application.CreditEntries.Commands.CreateCreditEntry
 {
-    public class CreateCreditEntryHandler(IRepository<CreditEntry> creditEntryRepository, IUnitOfWork unitOfWork)
+    public class CreateCreditEntryHandler(IRepository<CreditEntry> creditEntryRepository, IRepository<User> userRepository, IUnitOfWork unitOfWork)
         : ICommandHandler<CreateCreditEntryCommand, Result<CreateCreditEntryResult>>
     {
         public async Task<Result<CreateCreditEntryResult>> Handle(CreateCreditEntryCommand command, CancellationToken cancellationToken)
         {
-            var creditEntry = CreateNew(command.CreditEntry);
+            var creditEntry = await CreateNew(command);
             creditEntryRepository.Add(creditEntry);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return Result.Success(new CreateCreditEntryResult(creditEntry.Id));
         }
 
-        private CreditEntry CreateNew(CreditEntryDto creditEntryDto)
+        private async Task<CreditEntry> CreateNew(CreateCreditEntryCommand command)
         {
-            return CreditEntry.Create(creditEntryDto.ShopId, creditEntryDto.CustomerId, creditEntryDto.Item, creditEntryDto.Amount, creditEntryDto.Date,
-                creditEntryDto.IsPaid, creditEntryDto.PaymentDate);
+            var customer = await userRepository.GetSingle(x => x.Id == command.CustomerId && x.IsActive);
+            var shop = await userRepository.GetSingle(x => x.Id == command.ShopId && x.IsActive);
+            if (customer == null) 
+            {
+                throw new UserNotFoundException(command.CustomerId);
+            }
+            if (shop == null)
+            {
+                throw new UserNotFoundException(command.ShopId);
+            }
+            return CreditEntry.Create(command.ShopId, shop.Name, command.CustomerId, customer.Name, command.Item, command.Amount, command.Date,
+                command.IsPaid, command.PaymentDate);
         }
 
     }

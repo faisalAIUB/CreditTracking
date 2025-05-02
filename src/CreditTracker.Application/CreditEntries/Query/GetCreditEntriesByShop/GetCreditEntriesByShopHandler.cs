@@ -17,7 +17,7 @@ namespace CreditTracker.Application.CreditEntries.Query.GetCreditEntriesByShop
         {
             var pageSize = query.PaginationRequest.PageSize;
             var pageIndex = query.PaginationRequest.PageIndex;
-            var totalCount = await creditEntryRepo.CountAsync(x => x.IsActive);
+            var totalCount = await creditEntryRepo.CountAsync(x => x.IsActive && x.ShopId == query.ShopId);
             var creditEntries = await creditEntryRepo.GetByFilterWithPagination(x => x.ShopId == query.ShopId && x.IsActive, pageSize, pageSize * (pageIndex - 1));
 
             if (creditEntries == null || creditEntries.Count == 0)

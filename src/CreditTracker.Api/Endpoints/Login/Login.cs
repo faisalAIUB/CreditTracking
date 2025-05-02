@@ -20,7 +20,7 @@ namespace CreditTracker.Api.Endpoints.Login
             {
                 var command = request.Adapt<LoginCommand>();
                 var result = await sender.Send(command);
-                return result.ToApiResult<LoginResult, LoginResponse>();
+                return result.Value;
             }).WithName("Login")
             .Produces<LoginResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)

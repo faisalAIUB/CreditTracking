@@ -17,12 +17,15 @@ namespace CreditTracker.Api.Endpoints.CreditEntries
             {
                 var command = request.Adapt<UpdateCreditEntryCommand>();
                 var result = await sender.Send(command);
-                return result.ToApiResult<UpdateCreditEntryResult, UpdateCreditEntryResponse>();
+                return result.Value;
             })
                 .RequireAuthorization("ShopPolicy")
                 .WithName("Update Credit Entry")
                 .Produces<UpdateCreditEntryResponse>(StatusCodes.Status200OK)
                 .ProducesProblem(StatusCodes.Status400BadRequest)
+                .ProducesProblem(StatusCodes.Status409Conflict)
+                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesProblem(StatusCodes.Status401Unauthorized)
                 .WithSummary("Update Credit Entry")
                 .WithDescription("Update Credit Entry")
                 .WithMetadata(new SwaggerOperationAttribute(

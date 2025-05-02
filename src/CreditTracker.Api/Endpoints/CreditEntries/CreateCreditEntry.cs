@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace CreditTracker.Api.Endpoints.CreditEntries
 {
-    public record CreateCreditEntryRequest(CreditEntryDto CreditEntry);
+    public record CreateCreditEntryRequest(string ShopId, string CustomerId, string Item, decimal Amount, DateTime Date, bool IsPaid, DateTime? PaymentDate);
     public record CreateCreditEntryResponse(string Id);
     public class CreateCreditEntry : ICarterModule
     {
@@ -18,12 +18,15 @@ namespace CreditTracker.Api.Endpoints.CreditEntries
             {
                 var command = request.Adapt<CreateCreditEntryCommand>();
                 var result = await sender.Send(command);
-                return result.ToApiResult<CreateCreditEntryResult, CreateCreditEntryResponse>();
+                return result.Value;
             })
                 .RequireAuthorization("ShopPolicy")
                 .WithName("Create Credit Entry")
                 .Produces<CreateCreditEntryResponse>(StatusCodes.Status201Created)
                 .ProducesProblem(StatusCodes.Status400BadRequest)
+                .ProducesProblem(StatusCodes.Status409Conflict)
+                .ProducesProblem(StatusCodes.Status404NotFound)
+                .ProducesProblem(StatusCodes.Status401Unauthorized)
                 .WithSummary("Create Credit Entry")
                 .WithDescription("Create Credit Entry")
                 .WithMetadata(new SwaggerOperationAttribute(
