@@ -18,7 +18,7 @@ namespace CreditTracker.Api.Endpoints.CreditEntries
             {
                 var command = request.Adapt<CreateCreditEntryCommand>();
                 var result = await sender.Send(command);
-                return result.Value;
+                return Results.Ok(result.Value);
             })
                 .RequireAuthorization("ShopPolicy")
                 .WithName("Create Credit Entry")

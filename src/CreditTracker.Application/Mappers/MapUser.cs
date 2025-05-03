@@ -14,7 +14,7 @@ namespace CreditTracker.Application.Mappers
                 .IgnoreNonMapped(true)
                 .Map(dest => dest.Id, src => src.Id) 
                 .Map(dest => dest.UserName, src => src.UserName)
-               
+                .Map(dest => dest.ICNoOrPassport, src => src.ICNoOrPassport)
                 .Map(dest => dest.Role, src => src.Role)
                 .Map(dest => dest.Name, src => src.Name)
                 .Map(dest => dest.Email, src => src.Email)

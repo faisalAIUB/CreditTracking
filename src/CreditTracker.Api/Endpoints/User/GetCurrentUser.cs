@@ -17,7 +17,7 @@ namespace CreditTracker.Api.Endpoints.User
             {
                 var userId = httpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
                 var result = await sender.Send(new GetUserQuery(userId!));
-                return result.Value;
+                return Results.Ok(result.Value);
             }).RequireAuthorization(policy => policy.RequireRole("Shop", "Customer"))
                 .WithName("Get Current User")
                 .Produces<GetCreditEntryResponse>(StatusCodes.Status200OK)

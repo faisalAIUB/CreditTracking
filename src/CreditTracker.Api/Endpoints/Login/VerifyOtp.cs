@@ -19,7 +19,7 @@ namespace CreditTracker.Api.Endpoints.Login
             {
                 var command = request.Adapt<VerifyOtpCommand>();
                 var result = await sender.Send(command);
-                return result.Value;
+                return Results.Ok(result.Value);
 
             }).WithName("Verifyotp")
             .Produces<LoginResponse>(StatusCodes.Status200OK)

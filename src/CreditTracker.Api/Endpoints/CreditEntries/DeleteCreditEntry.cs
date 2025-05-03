@@ -15,7 +15,7 @@ namespace CreditTracker.Api.Endpoints.CreditEntries
             {
                 var command = new DeleteCreditEntryCommand(Id);
                 var result = await sender.Send(command);
-                return result.Value;
+                return Results.Ok(result.Value);
             })
                 .RequireAuthorization("ShopPolicy")
                 .WithName("Delete Credit Entry")

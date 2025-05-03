@@ -76,5 +76,18 @@ namespace CreditTracker.Infrastructure.Data.Repositories.Core
             long count = await DbSet.CountDocumentsAsync(predicate);
             return count > 0;
         }
+
+        public virtual async Task<List<TEntity>> TextSearchAsync(string searchText, Expression<Func<TEntity, bool>>? additionalFilter = null)
+        {
+            var textFilter = Builders<TEntity>.Filter.Text(searchText);
+            FilterDefinition<TEntity> finalFilter = textFilter;
+            if (additionalFilter != null)
+            {
+                var additionalMongoFilter = Builders<TEntity>.Filter.Where(additionalFilter);
+                finalFilter = Builders<TEntity>.Filter.And(textFilter, additionalMongoFilter);
+            }
+            var result = await DbSet.Find(finalFilter).ToListAsync();
+            return result;
+        }
     }
 }

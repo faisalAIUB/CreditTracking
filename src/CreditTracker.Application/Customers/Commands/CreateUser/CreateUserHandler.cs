@@ -35,7 +35,7 @@ namespace CreditTracker.Application.Customers.Commands.CreateUser
         }
         private User CreateNewUser(UserDto userDto, string otp, DateTime expiry)
         {
-            var newUser = User.Create(userDto.UserName, userDto.Email, PasswordHasher.Hash(userDto.Password),userDto.Role, userDto.Name,userDto.Address, userDto.Latitude, userDto.Longitude);
+            var newUser = User.Create(userDto.UserName, userDto.Email, PasswordHasher.Hash(userDto.Password),userDto.Role, userDto.Name, userDto.ICNoOrPassport, userDto.Address, userDto.Latitude, userDto.Longitude);
             newUser.SetOtp(otp, expiry);
             return newUser;
         }

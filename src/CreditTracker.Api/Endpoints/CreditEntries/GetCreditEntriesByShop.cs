@@ -17,7 +17,7 @@ namespace CreditTracker.Api.Endpoints.CreditEntries
             {
                 var query = new GetCreditEntriesByShopQuery(request, ShopId);
                 var result = await sender.Send(query);
-                return result.Value;
+                return Results.Ok(result.Value);
             }).RequireAuthorization("ShopPolicy")
                 .WithName("Get Credit Entry By Shop Id")
                 .Produces<GetCreditEntryResponse>(StatusCodes.Status200OK)

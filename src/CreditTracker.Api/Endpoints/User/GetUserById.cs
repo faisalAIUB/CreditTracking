@@ -16,7 +16,7 @@ namespace CreditTracker.Api.Endpoints.User
             {
                 var query = new GetUserQuery(Id);
                 var result = await sender.Send(query);
-                return result.Value;
+                return Results.Ok(result.Value);
             }).RequireAuthorization("ShopPolicy")
                 .WithName("Get User by Id")
                 .Produces<GetCreditEntryResponse>(StatusCodes.Status200OK)

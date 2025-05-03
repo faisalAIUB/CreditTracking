@@ -20,7 +20,7 @@ namespace CreditTracker.Api.Endpoints.User
             {
                 var command = request.Adapt<CreateUserCommand>();
                 var result = await sender.Send(command);
-                return result.Value;
+                return Results.Ok(result.Value);
             })
             .WithName("CreateUser")
             .Produces<CreateUserResponse>(StatusCodes.Status201Created)

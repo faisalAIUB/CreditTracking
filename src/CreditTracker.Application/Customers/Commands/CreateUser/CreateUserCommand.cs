@@ -15,6 +15,8 @@ namespace CreditTracker.Application.Customers.Commands.CreateUser
         {
             RuleFor(x => x.User.Name).NotEmpty().WithMessage("Name is required");
             RuleFor(x => x.User.UserName).NotEmpty().WithMessage("UserName is required");
+            RuleFor(x => x.User.ICNoOrPassport).NotEmpty().WithMessage("IC or passport is required");
+            RuleFor(x => x.User.Password).NotEmpty().WithMessage("Password is required");
             RuleFor(x => x.User.Role).Equal(Role.Customer).WithMessage("Only Customer role is allowed.");
         }
     }

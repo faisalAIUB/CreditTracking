@@ -15,6 +15,7 @@ namespace CreditTracker.Domain.Models
         public string PasswordHash { get; private set; } = default!;
         public Role Role { get; private set; } = Role.Customer; // "Shop" or "Customer"
         public string Name { get; private set; } = default!;
+        public string ICNoOrPassport { get; private set; } = default!;
         public string Address {  get; private set; } = default!;
         public string Latitude {  get; private set; } = default!;
         public string Longitude {  get; private set; } = default!;
@@ -38,7 +39,7 @@ namespace CreditTracker.Domain.Models
             }
             return false;
         }
-        public static User Create( string userName, string email, string passwordHash, Role role, string name, string address, string latitudel, string longitude)
+        public static User Create( string userName, string email, string passwordHash, Role role, string name, string iCNoOrPassport, string address, string latitudel, string longitude)
         {
             var user = new User
             {
@@ -47,6 +48,7 @@ namespace CreditTracker.Domain.Models
                 PasswordHash = passwordHash ,
                 Role = role ,
                 Name = name ,
+                ICNoOrPassport = iCNoOrPassport,
                 Address = address ,
                 Latitude = latitudel ,
                 Longitude = longitude,
